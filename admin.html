@@ -2,163 +2,292 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DOCTOR WATCHES | Admin</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      background: #f4f0e7;
-      font-family: Arial, sans-serif;
-      color: #172820;
-    }
-    .login-card {
-      width: 100%;
-      max-width: 400px;
-      background: #fffefa;
-      padding: 35px 25px;
-      border: 1px solid #e5dfd2;
-      border-radius: 14px;
-      text-align: center;
-      box-shadow: 0 8px 30px #17282012;
-    }
-    .brand {
-      font-size: 23px;
-      font-weight: bold;
-      letter-spacing: 1px;
-    }
-    .subtitle {
-      color: #8a8a7d;
-      font-size: 12px;
-      letter-spacing: 3px;
-      margin-top: 7px;
-    }
-    h2 { margin: 35px 0 8px; }
-    p { color: #777; font-size: 14px; }
-    input {
-      width: 100%;
-      padding: 14px;
-      margin-top: 14px;
-      border: 1px solid #ddd7ca;
-      border-radius: 7px;
-      background: #fff;
-      font-size: 15px;
-      direction: ltr;
-      text-align: left;
-    }
-    button {
-      width: 100%;
-      margin-top: 20px;
-      padding: 14px;
-      background: #205c49;
-      color: white;
-      border: 0;
-      border-radius: 7px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    button:disabled { opacity: .6; }
-    #message {
-      margin-top: 15px;
-      font-size: 14px;
-      line-height: 1.7;
-    }
-    .footer {
-      margin-top: 30px;
-      font-size: 11px;
-      color: #999;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DOCTOR WATCHES | Admin</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f4f0e7;color:#172820;font-family:Arial,sans-serif}
+button,input{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+header{background:#172820;color:white;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.brand{font-weight:bold;letter-spacing:1px;font-size:19px}
+header small{display:block;color:#c7cfc9;font-size:10px;letter-spacing:2px;margin-top:5px}
+.container{max-width:1100px;margin:25px auto;padding:0 15px}
+.login-card{max-width:420px;margin:12vh auto;background:#fffefa;padding:30px 24px;border:1px solid #e5dfd2;border-radius:14px;text-align:center;box-shadow:0 8px 30px #17282012}
+h1,h2,h3{margin-top:0}
+input{width:100%;padding:13px;margin:8px 0;border:1px solid #ddd7ca;border-radius:7px;background:white}
+.primary{background:#205c49;color:white;border:0;border-radius:7px;padding:13px 18px}
+.secondary{background:#fffefa;color:#205c49;border:1px solid #205c49;border-radius:7px;padding:10px 14px}
+.danger{background:#a53d35;color:white;border:0;border-radius:7px;padding:9px 12px}
+.full{width:100%;margin-top:12px}
+#message{margin-top:14px;font-size:14px;line-height:1.7}
+.nav{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:22px}
+.nav button{background:#fffefa;border:1px solid #e5dfd2;padding:12px 17px;border-radius:8px;color:#172820}
+.nav button.active{background:#205c49;color:white}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:22px}
+.stat,.panel{background:#fffefa;border:1px solid #e5dfd2;border-radius:11px;padding:18px}
+.stat strong{display:block;font-size:27px;color:#205c49;margin-top:8px}
+.panel{margin-bottom:16px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:520px}
+th,td{text-align:right;padding:12px;border-bottom:1px solid #eee8dd;font-size:14px}
+th{color:#66736c;background:#faf8f2}
+.status{color:#205c49;font-weight:bold}
+.muted{color:#85877e;font-size:13px}
+.section-title{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+footer{text-align:center;color:#999;font-size:12px;padding:25px}
+@media(max-width:500px){.stats{grid-template-columns:1fr 1fr}.stat{padding:13px}.stat strong{font-size:23px}header{padding:15px}}
+</style>
 </head>
 <body>
-  <main class="login-card">
+
+<header>
+  <div>
     <div class="brand">DOCTOR WATCHES</div>
-    <div class="subtitle">ADMINISTRATION PANEL</div>
+    <small>ADMINISTRATION PANEL</small>
+  </div>
+  <button id="logoutBtn" class="secondary hidden">تسجيل الخروج</button>
+</header>
 
+<main class="container">
+
+  <section id="loginSection" class="login-card">
     <h2>تسجيل دخول المدير</h2>
-    <p>سجّل الدخول لإدارة متجرك</p>
-
+    <p class="muted">سجّل الدخول لإدارة متجرك</p>
     <form id="loginForm">
-      <input id="email" type="email"
-        placeholder="البريد الإلكتروني" required>
-      <input id="password" type="password"
-        placeholder="كلمة المرور" required>
-      <button id="loginButton" type="submit">
-        تسجيل الدخول
-      </button>
+      <input id="email" type="email" placeholder="البريد الإلكتروني" required>
+      <input id="password" type="password" placeholder="كلمة المرور" required>
+      <button id="loginBtn" class="primary full" type="submit">تسجيل الدخول</button>
     </form>
-
     <div id="message"></div>
-    <div class="footer">DOCTOR WATCHES © 2026</div>
-  </main>
+  </section>
 
-  <script>
-    const SUPABASE_URL =
-      "https://ltdkxrkuxhsmozvhggqu.supabase.co";
+  <section id="dashboard" class="hidden">
+    <div class="section-title">
+      <div>
+        <h2>لوحة التحكم</h2>
+        <p class="muted">مرحبًا بك في إدارة DOCTOR WATCHES</p>
+      </div>
+      <span class="status">مدير المتجر</span>
+    </div>
 
-    const SUPABASE_KEY =
-      "sb_publishable_qmOzuZWXgShi21qCG0YRoQ_zWwWf9cl";
+    <nav class="nav">
+      <button class="active" data-page="home">الرئيسية</button>
+      <button data-page="products">المنتجات</button>
+      <button data-page="categories">الأقسام</button>
+      <button data-page="settings">الإعدادات</button>
+    </nav>
 
-    const db = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
-    );
+    <section id="homePage">
+      <div class="stats">
+        <div class="stat">المنتجات<strong id="productCount">—</strong></div>
+        <div class="stat">الأقسام<strong id="categoryCount">—</strong></div>
+      </div>
+      <div class="panel">
+        <h3>مرحبًا بك في لوحة الإدارة</h3>
+        <p class="muted">من هنا ستتمكن من متابعة وإدارة متجرك. سيتم تفعيل أدوات التعديل والإضافة في الخطوات التالية.</p>
+      </div>
+    </section>
 
-    const form = document.getElementById("loginForm");
-    const button = document.getElementById("loginButton");
-    const message = document.getElementById("message");
+    <section id="productsPage" class="hidden">
+      <div class="panel">
+        <div class="section-title">
+          <h3>منتجات المتجر</h3>
+          <button class="secondary" onclick="loadProducts()">تحديث القائمة</button>
+        </div>
+        <div id="productsMessage" class="muted">جارٍ تحميل المنتجات...</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>اسم المنتج</th><th>السعر</th><th>المخزون</th><th>الحالة</th></tr></thead>
+            <tbody id="productsBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
 
-    form.addEventListener("submit", async function(event) {
-      event.preventDefault();
-      button.disabled = true;
-      message.textContent = "جارٍ التحقق من البيانات...";
+    <section id="categoriesPage" class="hidden">
+      <div class="panel">
+        <div class="section-title">
+          <h3>أقسام المتجر</h3>
+          <button class="secondary" onclick="loadCategories()">تحديث القائمة</button>
+        </div>
+        <div id="categoriesMessage" class="muted">جارٍ تحميل الأقسام...</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>اسم القسم</th><th>الرابط المختصر</th><th>الحالة</th></tr></thead>
+            <tbody id="categoriesBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
 
-      try {
-        const email =
-          document.getElementById("email").value.trim();
-        const password =
-          document.getElementById("password").value;
+    <section id="settingsPage" class="hidden">
+      <div class="panel">
+        <h3>إعدادات المتجر</h3>
+        <p>الألوان: أسماء وصور لكل لون.</p>
+        <p>الخصومات: نسبة مئوية أو مبلغ ثابت.</p>
+        <p>العروض: عروض على المنتجات فقط.</p>
+        <p class="muted">سيتم تفعيل أدوات هذه الإعدادات في المراحل التالية.</p>
+      </div>
+    </section>
+  </section>
+</main>
 
-        const { data, error } =
-          await db.auth.signInWithPassword({
-            email,
-            password
-          });
+<footer>DOCTOR WATCHES © 2026</footer>
 
-        if (error) throw error;
+<script>
+const SUPABASE_URL = "https://ltdkxrkuxhsmozvhggqu.supabase.co";
+const SUPABASE_KEY = "sb_publishable_qmOzuZWXgShi21qCG0YRoQ_zWwWf9cl";
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        const { data: profile, error: profileError } =
-          await db.from("profiles")
-            .select("role")
-            .eq("id", data.user.id)
-            .maybeSingle();
+const loginSection = document.getElementById("loginSection");
+const dashboard = document.getElementById("dashboard");
+const message = document.getElementById("message");
+const logoutBtn = document.getElementById("logoutBtn");
 
-        if (profileError) throw profileError;
+function showDashboard(){
+  loginSection.classList.add("hidden");
+  dashboard.classList.remove("hidden");
+  logoutBtn.classList.remove("hidden");
+  loadProducts();
+  loadCategories();
+}
 
-        if (!profile || profile.role !== "admin") {
-          await db.auth.signOut();
-          throw new Error("هذا الحساب ليس لديه صلاحية المدير.");
-        }
+function showLogin(){
+  dashboard.classList.add("hidden");
+  loginSection.classList.remove("hidden");
+  logoutBtn.classList.add("hidden");
+}
 
-        message.style.color = "#205c49";
-        message.textContent =
-          "تم تسجيل الدخول والتحقق من صلاحية المدير بنجاح.";
+async function verifyAdmin(user){
+  const {data: profile,error} = await db
+    .from("profiles")
+    .select("role")
+    .eq("id",user.id)
+    .maybeSingle();
 
-      } catch (error) {
-        message.style.color = "#b42318";
-        message.textContent =
-          error.message || "حدث خطأ أثناء تسجيل الدخول.";
-      } finally {
-        button.disabled = false;
-      }
+  if(error) throw error;
+  if(!profile || profile.role !== "admin"){
+    await db.auth.signOut();
+    throw new Error("هذا الحساب ليس لديه صلاحية المدير.");
+  }
+  return true;
+}
+
+document.getElementById("loginForm").addEventListener("submit",async(e)=>{
+  e.preventDefault();
+  const btn=document.getElementById("loginBtn");
+  btn.disabled=true;
+  message.style.color="#777";
+  message.textContent="جارٍ التحقق من البيانات...";
+
+  try{
+    const {data,error}=await db.auth.signInWithPassword({
+      email:document.getElementById("email").value.trim(),
+      password:document.getElementById("password").value
     });
-  </script>
+    if(error) throw error;
+    await verifyAdmin(data.user);
+    message.style.color="#205c49";
+    message.textContent="تم تسجيل الدخول بنجاح.";
+    showDashboard();
+  }catch(err){
+    message.style.color="#b42318";
+    message.textContent=err.message || "تعذر تسجيل الدخول.";
+  }finally{
+    btn.disabled=false;
+  }
+});
+
+async function checkSession(){
+  try{
+    const {data:{session},error}=await db.auth.getSession();
+    if(error) throw error;
+    if(session){
+      await verifyAdmin(session.user);
+      showDashboard();
+    }
+  }catch(err){
+    showLogin();
+    message.textContent=err.message || "يرجى تسجيل الدخول مرة أخرى.";
+  }
+}
+
+logoutBtn.addEventListener("click",async()=>{
+  await db.auth.signOut();
+  showLogin();
+  message.textContent="تم تسجيل الخروج.";
+});
+
+async function loadProducts(){
+  const body=document.getElementById("productsBody");
+  const info=document.getElementById("productsMessage");
+  body.innerHTML="";
+  info.textContent="جارٍ تحميل المنتجات...";
+  try{
+    const {data,error}=await db.from("products")
+      .select("name,price,stock,is_active")
+      .order("created_at",{ascending:false});
+    if(error) throw error;
+    document.getElementById("productCount").textContent=data.length;
+    if(!data.length){info.textContent="لا توجد منتجات لعرضها.";return;}
+    info.textContent="";
+    data.forEach(p=>{
+      const tr=document.createElement("tr");
+      [p.name,Number(p.price).toLocaleString("en-US")+" جنيه",
+       p.stock, p.is_active?"نشط":"غير نشط"].forEach((value,i)=>{
+        const td=document.createElement("td");
+        td.textContent=value ?? "—";
+        if(i===3 && p.is_active) td.className="status";
+        tr.appendChild(td);
+      });
+      body.appendChild(tr);
+    });
+  }catch(err){info.textContent="تعذر تحميل المنتجات: "+err.message;}
+}
+
+async function loadCategories(){
+  const body=document.getElementById("categoriesBody");
+  const info=document.getElementById("categoriesMessage");
+  body.innerHTML="";
+  info.textContent="جارٍ تحميل الأقسام...";
+  try{
+    const {data,error}=await db.from("categories")
+      .select("name,slug,is_active")
+      .order("sort_order",{ascending:true});
+    if(error) throw error;
+    document.getElementById("categoryCount").textContent=data.length;
+    if(!data.length){info.textContent="لا توجد أقسام لعرضها.";return;}
+    info.textContent="";
+    data.forEach(c=>{
+      const tr=document.createElement("tr");
+      [c.name,c.slug,c.is_active?"نشط":"غير نشط"].forEach((value,i)=>{
+        const td=document.createElement("td");
+        td.textContent=value ?? "—";
+        if(i===2 && c.is_active) td.className="status";
+        tr.appendChild(td);
+      });
+      body.appendChild(tr);
+    });
+  }catch(err){info.textContent="تعذر تحميل الأقسام: "+err.message;}
+}
+
+document.querySelectorAll(".nav button").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    ["home","products","categories","settings"].forEach(page=>{
+      document.getElementById(page+"Page").classList.toggle("hidden",page!==btn.dataset.page);
+    });
+    if(btn.dataset.page==="products") loadProducts();
+    if(btn.dataset.page==="categories") loadCategories();
+  });
+});
+
+checkSession();
+</script>
 </body>
 </html>
