@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head>
+<head><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#f5f1e9">
@@ -87,7 +87,14 @@ form{display:grid;gap:10px}form label{font-size:12px;color:var(--muted)}form inp
 <p class="note">بالضغط على تأكيد الطلب، سيتم فتح واتساب برسالة تحتوي على بيانات طلبك. لا يتم حفظ الطلبات في قاعدة بيانات؛ احتفظ بنسخة من المحادثة لمتابعة الطلب.</p>
 </aside></div>
 <script>
-const WHATSAPP_NUMBER = "201070324860"; // رقم واتساب بصيغة دولية بدون +
+const SUPABASE_URL = "https://ltdkxrkuxhsmozvhggqu.supabase.co";
+
+const SUPABASE_KEY = "sb_publishable_qmOzuZWXgShi21qCG0YRoQ_zWwWf9cl";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);const WHATSAPP_NUMBER = "201070324860"; // رقم واتساب بصيغة دولية بدون +
 // عدّل أسماء المنتجات وأسعارها وروابط الصور من هذه القائمة قبل نشر المتجر.
 const products = [
 {id:1,name:"ساعة رجالي ",category:"رجالي",price:1200,desc:"تصميم أنيق للاستخدام اليومي.",image:"https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80"},
