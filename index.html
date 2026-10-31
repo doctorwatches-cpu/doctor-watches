@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -39,7 +38,7 @@ footer{background:var(--ink);color:#fff;padding:35px 22px;text-align:center}foot
 .drawer-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:14px}.close{border:0;background:none;font-size:26px;cursor:pointer}
 .cart-item{display:flex;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);font-size:13px}.qty button{border:1px solid var(--line);background:white;padding:3px 9px;cursor:pointer}
 .total{display:flex;justify-content:space-between;font-weight:bold;padding:18px 0;font-size:17px}
-form{display:grid;gap:10px}form label{font-size:12px;color:var(--muted)}form input,form textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:4px;background:white}form textarea{min-height:75px;resize:vertical}.send{background:var(--green);color:white;border:0;padding:14px;cursor:pointer;border-radius:4px}
+form{display:grid;gap:10px}form label{font-size:12px;color:var(--muted)}form input,form textarea,form select{width:100%;padding:12px;border:1px solid var(--line);border-radius:4px;background:white}form textarea{min-height:75px;resize:vertical}.send{background:var(--green);color:white;border:0;padding:14px;cursor:pointer;border-radius:4px}
 .note{font-size:11px;color:var(--muted);line-height:1.8;margin-top:12px}
 .status{max-width:1180px;margin:12px auto;padding:0 22px;color:var(--muted);font-size:12px}
 .modal{display:none;position:fixed;inset:0;background:#0009;z-index:20;overflow:auto;padding:20px}.modal.open{display:block}
@@ -62,7 +61,7 @@ form{display:grid;gap:10px}form label{font-size:12px;color:var(--muted)}form inp
 <main id="home">
 <section class="hero"><div class="hero-inner">
 <div class="hero-copy"><div class="eyebrow">DISCOVER YOUR STYLE</div><h1>وقتك يستحق<br>اختيارًا مميزًا</h1>
-<p>اكتشف تشكيلة الساعات والإكسسوارات التي تجمع بين الأناقة والعملية. اختر منتجك واطلب بسهولة عبر واتساب.</p>
+<p>اكتشف تشكيلة الساعات والإكسسوارات التي تجمع بين الأناقة والعملية. اختر منتجك وأكمل طلبك بسهولة من خلال المتجر.</p>
 <a class="primary" href="#products">تسوق الآن</a></div><div class="hero-image" role="img" aria-label="ساعة يد أنيقة"></div>
 </div></section>
 <section class="section" id="categories"><div class="section-head"><div><h2>تسوق حسب القسم</h2><p>اختار القسم المناسب لك</p></div></div>
@@ -76,7 +75,7 @@ form{display:grid;gap:10px}form label{font-size:12px;color:var(--muted)}form inp
 <div class="products" id="productGrid"></div></section>
 <section class="features"><div class="feature-row">
 <div class="feature"><b>الدفع عند الاستلام</b><span>ادفع عند استلام طلبك</span></div>
-<div class="feature"><b>طلب سهل وسريع</b><span>أرسل طلبك مباشرة عبر واتساب</span></div>
+<div class="feature"><b>طلب سهل وسريع</b><span>أكمل طلبك من خلال المتجر</span></div>
 <div class="feature"><b>خدمة العملاء</b><span>تواصل معنا للاستفسارات</span></div>
 </div></section>
 </main>
@@ -87,13 +86,20 @@ form{display:grid;gap:10px}form label{font-size:12px;color:var(--muted)}form inp
 <div id="cartItems"></div><div class="total"><span>الإجمالي</span><span id="total">0 جنيه</span></div>
 <div id="shippingNote" class="note"></div>
 <form id="checkout" onsubmit="sendOrder(event)">
-<label>الاسم بالكامل<input id="customerName" required placeholder="اكتب اسمك"></label>
-<label>رقم الهاتف<input id="customerPhone" required type="tel" placeholder="01xxxxxxxxx"></label>
-<label>العنوان بالتفصيل<input id="customerAddress" required placeholder="المحافظة، المنطقة، الشارع، رقم العقار"></label>
-<label>ملاحظات (اختياري)<textarea id="customerNotes" placeholder="اللون أو أي تفاصيل إضافية"></textarea></label>
-<button class="send" type="submit">تأكيد الطلب عبر واتساب</button>
+<label>الاسم بالكامل<input id="customerName" required minlength="2" placeholder="اكتب اسمك"></label>
+<label>رقم الهاتف<input id="customerPhone" required type="tel" inputmode="tel" placeholder="01xxxxxxxxx"></label>
+<label>المحافظة<select id="customerGovernorate" required><option value="">اختر المحافظة</option></select></label>
+<label>العنوان بالتفصيل<input id="customerAddress" required minlength="5" placeholder="المنطقة، الشارع، رقم العقار، علامة مميزة"></label>
+<label>طريقة الدفع<select id="paymentMethod" required>
+<option value="cod">الدفع عند الاستلام</option>
+<option value="vodafone_cash">فودافون كاش</option>
+<option value="instapay">InstaPay</option>
+</select></label>
+<label>ملاحظات (اختياري)<textarea id="customerNotes" placeholder="أي تفاصيل إضافية"></textarea></label>
+<div id="checkoutMessage" class="note" role="status"></div>
+<button class="send" id="submitOrderBtn" type="submit">تأكيد الطلب</button>
 </form>
-<p class="note">سيتم فتح واتساب برسالة تحتوي على تفاصيل طلبك. تكلفة الشحن للطلبات الأقل من 1500 جنيه يتم تأكيدها مع خدمة العملاء. الشحن مجاني للطلبات التي يتجاوز إجماليها 1500 جنيه.</p>
+<p class="note">بعد تأكيد الطلب سيظهر رقم الطلب والإجمالي النهائي. تكلفة الشحن للطلبات الأقل من 1500 جنيه يتم تأكيدها مع خدمة العملاء. الشحن مجاني للطلبات التي يتجاوز إجماليها 1500 جنيه.</p>
 </aside></div>
 
 <div class="modal" id="productModal" onclick="if(event.target===this)closeProduct()">
@@ -113,6 +119,8 @@ const SUPABASE_KEY="sb_publishable_qmOzuZWXgShi21qCG0YRoQ_zWwWf9cl";
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const WHATSAPP_NUMBER="201070324860";
 const FREE_SHIPPING_THRESHOLD=1500;
+const DEFAULT_SHIPPING_FEE=70;
+let shippingRates=[];
 const money=n=>Number(n||0).toLocaleString("en-US")+" جنيه";
 const safe=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 let products=[],cart=[],activeFilter="الكل",activeProduct=null,selectedVariant=null,selectedDetailImage="";
@@ -212,7 +220,7 @@ function chooseVariant(id){
  document.getElementById("detailStock").textContent=selectedVariant?`اللون ${selectedVariant.color_name} — المتاح ${selectedVariant.stock} قطعة`:"";
 }
 function closeProduct(){document.getElementById("productModal").classList.remove("open");}
-function cartKey(productId,variantId){return `${productId}::${variantId||"default"}`;}
+ function cartKey(productId,variantId){return `${productId}::${variantId||"default"}`;}
 function addCart(p,variant,qty=1){
  const stock=stockFor(p,variant),key=cartKey(p.id,variant?.id);
  const existing=cart.find(x=>x.key===key),next=(existing?.qty||0)+qty;
@@ -247,25 +255,102 @@ function changeQty(key,delta){
  renderCart();
 }
 function cartTotal(){return cart.reduce((sum,x)=>sum+x.unitPrice*x.qty,0);}
+function selectedGovernorate(){return document.getElementById("customerGovernorate").value;}
+function estimatedShipping(){
+ const subtotal=cartTotal();
+ if(subtotal>FREE_SHIPPING_THRESHOLD)return 0;
+ const rate=shippingRates.find(x=>x.governorate===selectedGovernorate());
+ return rate?Number(rate.fee):DEFAULT_SHIPPING_FEE;
+}
 function renderCart(){
  document.getElementById("cartCount").textContent=cart.reduce((s,x)=>s+x.qty,0);
  document.getElementById("cartItems").innerHTML=cart.length?cart.map(x=>`
  <div class="cart-item"><div><b>${safe(x.productName)}</b>${x.variantName?`<br>اللون: ${safe(x.variantName)}`:""}<br>${money(x.unitPrice)} × ${x.qty}</div>
- <div class="qty"><button onclick="changeQty('${x.key}',-1)">−</button> ${x.qty} <button onclick="changeQty('${x.key}',1)">+</button></div></div>`).join(""):'<p class="note">السلة فارغة حاليًا. أضف بعض المنتجات للمتابعة.</p>';
- const total=cartTotal();
- document.getElementById("total").textContent=money(total);
- document.getElementById("shippingNote").textContent=total>FREE_SHIPPING_THRESHOLD?"مبروك! الشحن مجاني لطلبك.":"الشحن مجاني للطلبات التي يتجاوز إجماليها 1500 جنيه. تكلفة الشحن للطلبات الأخرى تُؤكد عبر واتساب.";
+ <div class="qty"><button type="button" onclick="changeQty('${x.key}',-1)">−</button> ${x.qty} <button type="button" onclick="changeQty('${x.key}',1)">+</button></div></div>`).join(""):'<p class="note">السلة فارغة حاليًا. أضف بعض المنتجات للمتابعة.</p>';
+ const subtotal=cartTotal(),shipping=estimatedShipping();
+ document.getElementById("total").textContent=money(subtotal+shipping);
+ document.getElementById("shippingNote").textContent=subtotal>FREE_SHIPPING_THRESHOLD
+  ?"مبروك! الشحن مجاني لطلبك."
+  :`الشحن إلى المحافظة المختارة: ${money(shipping)}. اختر المحافظة لمعرفة الرسوم بدقة.`;
 }
 function toggleCart(show){document.getElementById("overlay").classList.toggle("open",show);}
-function sendOrder(e){
- e.preventDefault();if(!cart.length){alert("السلة فارغة");return;}
- const name=document.getElementById("customerName").value.trim(),phone=document.getElementById("customerPhone").value.trim(),address=document.getElementById("customerAddress").value.trim(),notes=document.getElementById("customerNotes").value.trim();
- const lines=cart.map(x=>`- ${x.productName}${x.variantName?` (${x.variantName})`:""} × ${x.qty} = ${money(x.unitPrice*x.qty)}`).join("\n");
- const total=cartTotal(),shipping=total>FREE_SHIPPING_THRESHOLD?"مجاني":"يتم تأكيده عبر خدمة العملاء";
- const msg=`طلب جديد من متجر DOCTOR WATCHES\n\nالاسم: ${name}\nالهاتف: ${phone}\nالعنوان: ${address}\n\nالمنتجات:\n${lines}\n\nالإجمالي: ${money(total)}\nالشحن: ${shipping}\nطريقة الدفع: الدفع عند الاستلام\nملاحظات: ${notes||"لا يوجد"}`;
- window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`,"_blank");
+function setCheckoutMessage(message,isError=false){
+ const el=document.getElementById("checkoutMessage");
+ if(el){el.textContent=message;el.style.color=isError?"#a83232":"#245b48";}
+}
+async function loadShippingRates(){
+ const select=document.getElementById("customerGovernorate");
+ const {data,error}=await supabaseClient.from("store_shipping_rates")
+  .select("governorate,fee").eq("is_active",true).order("governorate");
+ if(error){
+  console.error("Shipping rates error:",error);
+  setCheckoutMessage("تعذر تحميل المحافظات. حدّث الصفحة وحاول مرة أخرى.",true);
+  return;
+ }
+ shippingRates=data||[];
+ select.innerHTML='<option value="">اختر المحافظة</option>'+shippingRates.map(r=>`<option value="${safe(r.governorate)}">${safe(r.governorate)}</option>`).join("");
+ renderCart();
+}
+document.getElementById("customerGovernorate").addEventListener("change",renderCart);
+ function makeRequestId(){
+ const key="doctorWatchesPendingRequest";
+ let id=localStorage.getItem(key);
+ if(!id){id=crypto.randomUUID();localStorage.setItem(key,id);}
+ return id;
+}
+async function sendOrder(e){
+ e.preventDefault();
+ if(!cart.length){setCheckoutMessage("السلة فارغة. أضف منتجًا أولًا.",true);return;}
+ const btn=document.getElementById("submitOrderBtn");
+ const name=document.getElementById("customerName").value.trim();
+ const phone=document.getElementById("customerPhone").value.trim();
+ const governorate=selectedGovernorate();
+ const address=document.getElementById("customerAddress").value.trim();
+ const notes=document.getElementById("customerNotes").value.trim();
+ const paymentMethod=document.getElementById("paymentMethod").value;
+ if(!governorate){setCheckoutMessage("اختر المحافظة أولًا.",true);return;}
+ if(!/^[0-9+\s()-]{10,20}$/.test(phone)){setCheckoutMessage("اكتب رقم هاتف صحيحًا للتواصل معك.",true);return;}
+ const items=cart.map(x=>({product_id:x.productId,variant_id:x.variantId,quantity:x.qty}));
+ btn.disabled=true;btn.textContent="جارٍ تسجيل الطلب...";
+ setCheckoutMessage("جارٍ التحقق من المنتجات والمخزون وحساب الشحن...");
+ try{
+  const {data,error}=await supabaseClient.rpc("create_store_order",{
+   p_client_request_id:makeRequestId(),
+   p_customer_name:name,
+   p_customer_phone:phone,
+   p_governorate:governorate,
+   p_address:address,
+   p_customer_notes:notes,
+   p_payment_method:paymentMethod,
+   p_items:items,
+   p_coupon_code:null
+  });
+  if(error)throw error;
+  if(!data||data.success!==true||!data.order_number)throw new Error("لم يتم تأكيد الطلب. حاول مرة أخرى.");
+  const labels={cod:"الدفع عند الاستلام",vodafone_cash:"فودافون كاش",instapay:"InstaPay"};
+  const summary=`تم تسجيل طلبك بنجاح
+رقم الطلب: ${data.order_number}
+إجمالي المنتجات: ${money(data.subtotal)}
+الخصم: ${money(data.discount)}
+الشحن: ${Number(data.shipping)===0?"مجاني":money(data.shipping)}
+الإجمالي النهائي: ${money(data.total)}
+طريقة الدفع: ${labels[paymentMethod]}`;
+  cart=[];
+  localStorage.removeItem("doctorWatchesPendingRequest");
+  renderCart();
+  document.getElementById("checkout").reset();
+  setCheckoutMessage(paymentMethod==="cod"?summary:summary+"\nملاحظة: رفع إيصال التحويل وربطه بالطلب سيتم تفعيله في الخطوة التالية.");
+  btn.disabled=false;
+  btn.textContent="تأكيد الطلب";
+ }catch(err){
+  console.error("Create order error:",err);
+  setCheckoutMessage(err.message||"حدث خطأ أثناء تسجيل الطلب. حاول مرة أخرى.",true);
+  btn.disabled=false;
+  btn.textContent="تأكيد الطلب";
+ }
 }
 renderCart();
+loadShippingRates();
 loadStoreProducts();
 </script>
 </body>
