@@ -1,0 +1,164 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DOCTOR WATCHES | Admin</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: #f4f0e7;
+      font-family: Arial, sans-serif;
+      color: #172820;
+    }
+    .login-card {
+      width: 100%;
+      max-width: 400px;
+      background: #fffefa;
+      padding: 35px 25px;
+      border: 1px solid #e5dfd2;
+      border-radius: 14px;
+      text-align: center;
+      box-shadow: 0 8px 30px #17282012;
+    }
+    .brand {
+      font-size: 23px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    .subtitle {
+      color: #8a8a7d;
+      font-size: 12px;
+      letter-spacing: 3px;
+      margin-top: 7px;
+    }
+    h2 { margin: 35px 0 8px; }
+    p { color: #777; font-size: 14px; }
+    input {
+      width: 100%;
+      padding: 14px;
+      margin-top: 14px;
+      border: 1px solid #ddd7ca;
+      border-radius: 7px;
+      background: #fff;
+      font-size: 15px;
+      direction: ltr;
+      text-align: left;
+    }
+    button {
+      width: 100%;
+      margin-top: 20px;
+      padding: 14px;
+      background: #205c49;
+      color: white;
+      border: 0;
+      border-radius: 7px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:disabled { opacity: .6; }
+    #message {
+      margin-top: 15px;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    .footer {
+      margin-top: 30px;
+      font-size: 11px;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+  <main class="login-card">
+    <div class="brand">DOCTOR WATCHES</div>
+    <div class="subtitle">ADMINISTRATION PANEL</div>
+
+    <h2>تسجيل دخول المدير</h2>
+    <p>سجّل الدخول لإدارة متجرك</p>
+
+    <form id="loginForm">
+      <input id="email" type="email"
+        placeholder="البريد الإلكتروني" required>
+      <input id="password" type="password"
+        placeholder="كلمة المرور" required>
+      <button id="loginButton" type="submit">
+        تسجيل الدخول
+      </button>
+    </form>
+
+    <div id="message"></div>
+    <div class="footer">DOCTOR WATCHES © 2026</div>
+  </main>
+
+  <script>
+    const SUPABASE_URL =
+      "https://ltdkxrkuxhsmozvhggqu.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_qmOzuZWXgShi21qCG0YRoQ_zWwWf9cl";
+
+    const db = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+    const form = document.getElementById("loginForm");
+    const button = document.getElementById("loginButton");
+    const message = document.getElementById("message");
+
+    form.addEventListener("submit", async function(event) {
+      event.preventDefault();
+      button.disabled = true;
+      message.textContent = "جارٍ التحقق من البيانات...";
+
+      try {
+        const email =
+          document.getElementById("email").value.trim();
+        const password =
+          document.getElementById("password").value;
+
+        const { data, error } =
+          await db.auth.signInWithPassword({
+            email,
+            password
+          });
+
+        if (error) throw error;
+
+        const { data: profile, error: profileError } =
+          await db.from("profiles")
+            .select("role")
+            .eq("id", data.user.id)
+            .maybeSingle();
+
+        if (profileError) throw profileError;
+
+        if (!profile || profile.role !== "admin") {
+          await db.auth.signOut();
+          throw new Error("هذا الحساب ليس لديه صلاحية المدير.");
+        }
+
+        message.style.color = "#205c49";
+        message.textContent =
+          "تم تسجيل الدخول والتحقق من صلاحية المدير بنجاح.";
+
+      } catch (error) {
+        message.style.color = "#b42318";
+        message.textContent =
+          error.message || "حدث خطأ أثناء تسجيل الدخول.";
+      } finally {
+        button.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
