@@ -1,40 +1,39 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#f5f1e9">
 <title>DOCTOR WATCHES | متجر الساعات</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{--ink:#18221f;--muted:#68716c;--cream:#f5f1e9;--paper:#fffdf9;--line:#e6e0d6;--accent:#9b7651;--green:#245b48}
 *{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font-family:Tahoma,Arial,sans-serif}
 a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit}
-.topbar{background:var(--ink);color:#fff;text-align:center;padding:9px 12px;font-size:12px;letter-spacing:.2px}
-header{background:rgba(255,253,249,.96);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+button{cursor:pointer}.topbar{background:var(--ink);color:#fff;text-align:center;padding:9px 12px;font-size:12px}
+header{background:rgba(255,253,249,.97);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
 .nav{max-width:1180px;margin:auto;padding:16px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .brand{font-size:22px;font-weight:800;letter-spacing:1.5px;direction:ltr}.brand small{display:block;font-size:9px;letter-spacing:4px;color:var(--accent);text-align:center;margin-top:4px}
 .navlinks{display:flex;gap:22px;font-size:13px;color:var(--muted)}.cartbtn,.primary{border:0;background:var(--ink);color:white;padding:12px 17px;border-radius:4px;cursor:pointer}
 .cartbtn span{background:#fff;color:var(--ink);border-radius:50%;padding:2px 7px;margin-right:6px}
-.hero{max-width:1180px;margin:28px auto 54px;padding:0 22px}
-.hero-inner{min-height:420px;border-radius:8px;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;background:#ded8cd}
-.hero-copy{padding:60px 8%;display:flex;flex-direction:column;justify-content:center}
-.eyebrow{font-size:11px;letter-spacing:3px;color:var(--accent);direction:ltr;text-align:right}
-h1{font-size:clamp(32px,5vw,56px);line-height:1.25;margin:18px 0 12px;letter-spacing:.5px}
-.hero-copy p{color:#626a64;line-height:2;font-size:15px;max-width:440px}
+.hero{max-width:1180px;margin:28px auto 54px;padding:0 22px}.hero-inner{min-height:420px;border-radius:8px;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;background:#ded8cd}
+.hero-copy{padding:60px 8%;display:flex;flex-direction:column;justify-content:center}.eyebrow{font-size:11px;letter-spacing:3px;color:var(--accent);direction:ltr;text-align:right}
+h1{font-size:clamp(32px,5vw,56px);line-height:1.25;margin:18px 0 12px;letter-spacing:.5px}.hero-copy p{color:#626a64;line-height:2;font-size:15px;max-width:440px}
 .hero-image{background:linear-gradient(90deg,rgba(0,0,0,.05),transparent),url('https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1200&q=85') center/cover;min-height:320px}
 .primary{display:inline-block;background:var(--green);margin-top:18px;width:max-content;padding:14px 24px}
-.section{max-width:1180px;margin:0 auto 58px;padding:0 22px}
-.section-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:22px}
+.section{max-width:1180px;margin:0 auto 58px;padding:0 22px}.section-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:22px;gap:12px}
 .section-head h2{font-size:25px;margin:0}.section-head p{color:var(--muted);font-size:12px;margin:7px 0 0}
-.categories{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.category{background:var(--paper);padding:24px;border:1px solid var(--line);text-align:center;border-radius:6px;cursor:pointer}
+.categories{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.category{background:var(--paper);padding:24px;border:1px solid var(--line);text-align:center;border-radius:6px;cursor:pointer}
 .category b{display:block;margin-bottom:7px}.category span{font-size:12px;color:var(--muted)}
-.products{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.product{background:var(--paper);border:1px solid var(--line);border-radius:6px;overflow:hidden}
-.product img{width:100%;height:230px;object-fit:cover;background:#e8e3da;display:block}
-.product-info{padding:16px}.product-info h3{font-size:15px;margin:0 0 8px}.product-info p{font-size:12px;color:var(--muted);margin:0 0 12px;line-height:1.7}
-.price{font-weight:bold;color:var(--green);margin-bottom:12px}.add{width:100%;padding:11px;border:1px solid var(--ink);background:transparent;cursor:pointer;border-radius:3px}.add:hover{background:var(--ink);color:white}
-.features{background:#e9e4da;padding:30px 22px}.feature-row{max-width:1180px;margin:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;text-align:center}.feature b{display:block;margin-bottom:7px}.feature span{font-size:12px;color:var(--muted)}
+.products{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.product{background:var(--paper);border:1px solid var(--line);border-radius:6px;overflow:hidden;cursor:pointer}
+.product img{width:100%;height:230px;object-fit:cover;background:#e8e3da;display:block}.product-info{padding:16px}
+.product-info h3{font-size:15px;margin:0 0 8px}.product-info p{font-size:12px;color:var(--muted);margin:0 0 12px;line-height:1.7}
+.price{font-weight:bold;color:var(--green);margin-bottom:12px}.old-price{color:#92928c;text-decoration:line-through;font-size:12px;margin-right:7px;font-weight:normal}
+.add{width:100%;padding:11px;border:1px solid var(--ink);background:transparent;cursor:pointer;border-radius:3px}.add:hover{background:var(--ink);color:white}
+.badge{display:inline-block;background:#efe5d7;color:#795b3b;padding:5px 8px;border-radius:3px;font-size:11px;margin-bottom:9px}
+.features{background:#e9e4da;padding:30px 22px}.feature-row{max-width:1180px;margin:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;text-align:center}
+.feature b{display:block;margin-bottom:7px}.feature span{font-size:12px;color:var(--muted)}
 footer{background:var(--ink);color:#fff;padding:35px 22px;text-align:center}footer p{font-size:12px;color:#c6ccc7;line-height:2}
 .overlay{display:none;position:fixed;inset:0;background:#0008;z-index:10}.overlay.open{display:block}.drawer{position:absolute;left:0;top:0;height:100%;width:min(480px,100%);background:var(--paper);padding:22px;overflow:auto}
 .drawer-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:14px}.close{border:0;background:none;font-size:26px;cursor:pointer}
@@ -42,7 +41,14 @@ footer{background:var(--ink);color:#fff;padding:35px 22px;text-align:center}foot
 .total{display:flex;justify-content:space-between;font-weight:bold;padding:18px 0;font-size:17px}
 form{display:grid;gap:10px}form label{font-size:12px;color:var(--muted)}form input,form textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:4px;background:white}form textarea{min-height:75px;resize:vertical}.send{background:var(--green);color:white;border:0;padding:14px;cursor:pointer;border-radius:4px}
 .note{font-size:11px;color:var(--muted);line-height:1.8;margin-top:12px}
-@media(max-width:760px){.navlinks{display:none}.hero-inner{grid-template-columns:1fr}.hero-image{order:-1;min-height:230px}.hero-copy{padding:32px 25px}.products{grid-template-columns:repeat(2,1fr)}.product img{height:175px}.categories{gap:8px}.category{padding:17px 7px}.feature-row{grid-template-columns:1fr;gap:22px}}
+.status{max-width:1180px;margin:12px auto;padding:0 22px;color:var(--muted);font-size:12px}
+.modal{display:none;position:fixed;inset:0;background:#0009;z-index:20;overflow:auto;padding:20px}.modal.open{display:block}
+.modal-card{max-width:760px;margin:20px auto;background:var(--paper);border-radius:8px;padding:20px;position:relative}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}.detail-main{width:100%;height:330px;object-fit:cover;background:#eee;border-radius:5px}
+.thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.thumb{width:64px;height:64px;object-fit:cover;border:1px solid var(--line);border-radius:4px;cursor:pointer}
+.color-options{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.color-option{border:1px solid var(--line);background:white;color:var(--ink);padding:8px 12px;border-radius:4px}.color-option.selected{border:2px solid var(--green);background:#edf3ef}
+.detail-price{font-size:22px;color:var(--green);font-weight:bold;margin:14px 0}
+@media(max-width:760px){.navlinks{display:none}.hero-inner{grid-template-columns:1fr}.hero-image{order:-1;min-height:230px}.hero-copy{padding:32px 25px}.products{grid-template-columns:repeat(2,1fr)}.product img{height:175px}.categories{gap:8px}.category{padding:17px 7px}.feature-row{grid-template-columns:1fr;gap:22px}.detail-grid{grid-template-columns:1fr}.detail-main{height:260px}}
 @media(max-width:420px){.products{grid-template-columns:1fr}.product img{height:230px}.brand{font-size:18px}}
 </style>
 </head>
@@ -65,7 +71,8 @@ form{display:grid;gap:10px}form label{font-size:12px;color:var(--muted)}form inp
 <div class="category" onclick="filterProducts('حريمي')"><b>الساعات الحريمي</b><span>تفاصيل تكمّل إطلالتك</span></div>
 <div class="category" onclick="filterProducts('إكسسوارات')"><b>الإكسسوارات</b><span>لمستك الأخيرة</span></div>
 </div></section>
-<section class="section" id="products"><div class="section-head"><div><h2>منتجاتنا</h2><p>الأسعار والصور المعروضة أمثلة قابلة للتعديل قبل النشر</p></div><button class="add" style="width:auto" onclick="filterProducts('الكل')">عرض الكل</button></div>
+<div id="storeStatus" class="status">جارٍ تحميل المنتجات...</div>
+<section class="section" id="products"><div class="section-head"><div><h2>منتجاتنا</h2><p>تُحدّث المنتجات والأسعار تلقائيًا من المتجر</p></div><button class="add" style="width:auto" onclick="filterProducts('الكل')">عرض الكل</button></div>
 <div class="products" id="productGrid"></div></section>
 <section class="features"><div class="feature-row">
 <div class="feature"><b>الدفع عند الاستلام</b><span>ادفع عند استلام طلبك</span></div>
@@ -74,9 +81,11 @@ form{display:grid;gap:10px}form label{font-size:12px;color:var(--muted)}form inp
 </div></section>
 </main>
 <footer id="contact"><div class="brand">DOCTOR WATCHES</div><p>للطلب والاستفسار عبر واتساب<br><span dir="ltr">+20 107 032 4860</span></p><p>© 2026 Doctor Watches — جميع الحقوق محفوظة</p></footer>
+
 <div class="overlay" id="overlay" onclick="if(event.target===this)toggleCart(false)"><aside class="drawer">
 <div class="drawer-head"><h2>سلة التسوق</h2><button class="close" onclick="toggleCart(false)">×</button></div>
 <div id="cartItems"></div><div class="total"><span>الإجمالي</span><span id="total">0 جنيه</span></div>
+<div id="shippingNote" class="note"></div>
 <form id="checkout" onsubmit="sendOrder(event)">
 <label>الاسم بالكامل<input id="customerName" required placeholder="اكتب اسمك"></label>
 <label>رقم الهاتف<input id="customerPhone" required type="tel" placeholder="01xxxxxxxxx"></label>
@@ -84,48 +93,180 @@ form{display:grid;gap:10px}form label{font-size:12px;color:var(--muted)}form inp
 <label>ملاحظات (اختياري)<textarea id="customerNotes" placeholder="اللون أو أي تفاصيل إضافية"></textarea></label>
 <button class="send" type="submit">تأكيد الطلب عبر واتساب</button>
 </form>
-<p class="note">بالضغط على تأكيد الطلب، سيتم فتح واتساب برسالة تحتوي على بيانات طلبك. لا يتم حفظ الطلبات في قاعدة بيانات؛ احتفظ بنسخة من المحادثة لمتابعة الطلب.</p>
+<p class="note">سيتم فتح واتساب برسالة تحتوي على تفاصيل طلبك. تكلفة الشحن للطلبات الأقل من 1500 جنيه يتم تأكيدها مع خدمة العملاء. الشحن مجاني للطلبات التي يتجاوز إجماليها 1500 جنيه.</p>
 </aside></div>
+
+<div class="modal" id="productModal" onclick="if(event.target===this)closeProduct()">
+<div class="modal-card">
+<div class="row" style="display:flex;justify-content:space-between;align-items:center"><h2 id="detailName"></h2><button class="close" onclick="closeProduct()">×</button></div>
+<div class="detail-grid">
+<div><img id="detailMainImage" class="detail-main" alt=""><div id="detailThumbs" class="thumbs"></div></div>
+<div><div id="detailOffer"></div><p id="detailDescription" class="note"></p><div id="detailPrice" class="detail-price"></div>
+<div><b>اختار اللون</b><div id="detailColors" class="color-options"></div><div id="detailStock" class="note"></div></div>
+<label>الكمية<input id="detailQty" type="number" min="1" value="1" style="width:100px;padding:10px;border:1px solid var(--line)"></label>
+<button class="send" id="detailAdd" type="button">أضف إلى السلة</button>
+</div></div></div></div>
+
 <script>
-const SUPABASE_URL = "https://ltdkxrkuxhsmozvhggqu.supabase.co";
+const SUPABASE_URL="https://ltdkxrkuxhsmozvhggqu.supabase.co";
+const SUPABASE_KEY="sb_publishable_qmOzuZWXgShi21qCG0YRoQ_zWwWf9cl";
+const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const WHATSAPP_NUMBER="201070324860";
+const FREE_SHIPPING_THRESHOLD=1500;
+const money=n=>Number(n||0).toLocaleString("en-US")+" جنيه";
+const safe=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let products=[],cart=[],activeFilter="الكل",activeProduct=null,selectedVariant=null,selectedDetailImage="";
 
-const SUPABASE_KEY = "sb_publishable_qmOzuZWXgShi21qCG0YRoQ_zWwWf9cl";
-
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);const WHATSAPP_NUMBER = "201070324860"; // رقم واتساب بصيغة دولية بدون +
-// عدّل أسماء المنتجات وأسعارها وروابط الصور من هذه القائمة قبل نشر المتجر.
-const products = [
-{id:1,name:"ساعة رجالي ",category:"رجالي",price:1200,desc:"تصميم أنيق للاستخدام اليومي.",image:"https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80"},
-{id:2,name:"ساعة رجالي ستانلس",category:"رجالي",price:950,desc:"مظهر عصري وتفاصيل عملية.",image:"https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=800&q=80"},
-{id:3,name:"ساعة حريمي أنيقة",category:"حريمي",price:790,desc:"لمسة رقيقة تناسب إطلالتك.",image:"https://images.unsplash.com/photo-1509017174183-0b7e0278f1ec?auto=format&fit=crop&w=800&q=80"},
-{id:4,name:"ساعة حريمي كلاسيك",category:"حريمي",price:880,desc:"تصميم بسيط وأنيق.",image:"https://images.unsplash.com/photo-1434056886845-dac89ffe9b56?auto=format&fit=crop&w=800&q=80"},
-{id:5,name:"إكسسوار ساعة",category:"إكسسوارات",price:250,desc:"أضف لمستك الخاصة إلى ساعتك.",image:"https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=800&q=80"},
-{id:6,name:"سوار إكسسوارات",category:"إكسسوارات",price:180,desc:"قطعة بسيطة تكمل مظهرك.",image:"https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=800&q=80"}
-];
-let cart = [];
-const money = n => n.toLocaleString("en-US")+" جنيه";
-function renderProducts(list=products){
- document.getElementById("productGrid").innerHTML=list.map(p=>`<article class="product"><img src="${p.image}" alt="${p.name}" loading="lazy"><div class="product-info"><h3>${p.name}</h3><p>${p.desc}</p><div class="price">${money(p.price)}</div><button class="add" onclick="addToCart(${p.id})">أضف إلى السلة</button></div></article>`).join("");
+function categoryLabel(p){
+ const raw=String(p.gender||p.category_name||"").trim().toLowerCase();
+ if(raw.includes("حري")||raw==="women"||raw==="female")return "حريمي";
+ if(raw.includes("اكس")||raw.includes("إكس")||raw==="accessories")return "إكسسوارات";
+ if(raw.includes("رج")||raw==="men"||raw==="male")return "رجالي";
+ const slug=String(p.categories?.slug||"").toLowerCase();
+ if(slug.includes("women"))return "حريمي";
+ if(slug.includes("accessor"))return "إكسسوارات";
+ return "رجالي";
 }
-function filterProducts(cat){renderProducts(cat==="الكل"?products:products.filter(p=>p.category===cat));document.getElementById("products").scrollIntoView({behavior:"smooth"});}
-function addToCart(id){const item=cart.find(x=>x.id===id);if(item)item.qty++;else cart.push({id,qty:1});renderCart();toggleCart(true);}
-function changeQty(id,delta){const item=cart.find(x=>x.id===id);if(!item)return;item.qty+=delta;if(item.qty<=0)cart=cart.filter(x=>x.id!==id);renderCart();}
+function salePrice(p){
+ const price=Number(p.price)||0,value=Number(p.discount_value)||0;
+ if(!p.discount_type||value<=0)return price;
+ if(p.discount_type==="percentage")return Math.max(0,price*(1-Math.min(value,100)/100));
+ if(p.discount_type==="fixed")return Math.max(0,price-value);
+ return price;
+}
+function productImages(p){
+ const rows=(p.product_images||[]).slice().sort((a,b)=>(a.sort_order||0)-(b.sort_order||0));
+ return rows.map(x=>x.image_url).filter(Boolean);
+}
+function availableVariants(p){return (p.product_variants||[]).filter(v=>v.is_active!==false);}
+function stockFor(p,variant){return variant?Number(variant.stock||0):Number(p.stock||0);}
+function priceMarkup(p){
+ const current=salePrice(p),original=Number(p.price)||0;
+ return `<span>${money(current)}</span>${current<original?` <span class="old-price">${money(original)}</span>`:""}`;
+}
+function renderProducts(list=products){
+ const grid=document.getElementById("productGrid");
+ if(!list.length){grid.innerHTML='<p class="note">لا توجد منتجات متاحة في هذا القسم حاليًا.</p>';return;}
+ grid.innerHTML=list.map(p=>{
+  const imgs=productImages(p),variants=availableVariants(p),image=imgs[0]||variants.find(v=>v.color_image_url)?.color_image_url||"";
+  const discount=salePrice(p)<Number(p.price);
+  return `<article class="product" onclick="openProduct('${p.id}')">
+   <img src="${safe(image)}" alt="${safe(p.name)}" loading="lazy">
+   <div class="product-info">${discount?'<span class="badge">عرض خاص</span>':""}
+   <h3>${safe(p.name)}</h3><p>${safe(p.description||"تصميم أنيق يناسب أسلوبك.")}</p>
+   <div class="price">${priceMarkup(p)}</div>
+   <button class="add" onclick="event.stopPropagation();quickAdd('${p.id}')">أضف إلى السلة</button></div></article>`;
+ }).join("");
+}
+function filterProducts(cat){
+ activeFilter=cat;
+ renderProducts(cat==="الكل"?products:products.filter(p=>categoryLabel(p)===cat));
+ document.getElementById("products").scrollIntoView({behavior:"smooth"});
+}
+async function loadStoreProducts(){
+ const status=document.getElementById("storeStatus");
+ status.textContent="جارٍ تحميل المنتجات من المتجر...";
+ const {data,error}=await supabaseClient.from("products")
+  .select("*, product_images(image_url,alt_text,sort_order), product_variants(id,color_name,color_image_url,stock,is_active,sort_order)")
+  .eq("is_active",true).order("created_at",{ascending:false});
+ if(error){
+  status.textContent="تعذر تحميل المنتجات حاليًا. حاول تحديث الصفحة بعد قليل.";
+  console.error("Supabase products error:",error);
+  return;
+ }
+ products=(data||[]).map(p=>({...p,category_name:categoryLabel(p)}));
+ status.textContent=products.length?`تم تحميل ${products.length} منتج من DOCTOR WATCHES`:"لا توجد منتجات متاحة حاليًا.";
+ filterProducts(activeFilter);
+}
+function openProduct(id){
+ const p=products.find(x=>String(x.id)===String(id));if(!p)return;
+ activeProduct=p;selectedVariant=null;
+ const variants=availableVariants(p);
+ const imgs=productImages(p);
+ if(!imgs.length&&variants.some(v=>v.color_image_url))imgs.push(variants.find(v=>v.color_image_url).color_image_url);
+ selectedDetailImage=imgs[0]||"";
+ document.getElementById("detailName").textContent=p.name;
+ document.getElementById("detailDescription").textContent=p.description||"";
+ document.getElementById("detailMainImage").src=selectedDetailImage;
+ document.getElementById("detailThumbs").innerHTML=imgs.map(url=>`<img class="thumb" src="${safe(url)}" onclick="setDetailImage('${safe(url)}')">`).join("");
+ document.getElementById("detailOffer").innerHTML=p.offer_active?'<span class="badge">عرض مميز</span>':"";
+ document.getElementById("detailPrice").innerHTML=priceMarkup(p);
+ document.getElementById("detailQty").value=1;
+ const colors=document.getElementById("detailColors");
+ if(variants.length){
+  colors.innerHTML=variants.map(v=>`<button type="button" class="color-option" onclick="chooseVariant('${v.id}')">${safe(v.color_name)}</button>`).join("");
+  chooseVariant(variants[0].id);
+ }else{
+  colors.innerHTML='<span class="note">اللون حسب الصورة المعروضة</span>';
+  document.getElementById("detailStock").textContent=`المتاح: ${p.stock||0} قطعة`;
+ }
+ document.getElementById("detailAdd").onclick=()=>addDetailToCart();
+ document.getElementById("productModal").classList.add("open");
+}
+function setDetailImage(url){selectedDetailImage=url;document.getElementById("detailMainImage").src=url;}
+function chooseVariant(id){
+ if(!activeProduct)return;
+ selectedVariant=availableVariants(activeProduct).find(v=>String(v.id)===String(id))||null;
+ document.querySelectorAll(".color-option").forEach(b=>b.classList.toggle("selected",b.textContent===selectedVariant?.color_name));
+ if(selectedVariant?.color_image_url)setDetailImage(selectedVariant.color_image_url);
+ document.getElementById("detailStock").textContent=selectedVariant?`اللون ${selectedVariant.color_name} — المتاح ${selectedVariant.stock} قطعة`:"";
+}
+function closeProduct(){document.getElementById("productModal").classList.remove("open");}
+function cartKey(productId,variantId){return `${productId}::${variantId||"default"}`;}
+function addCart(p,variant,qty=1){
+ const stock=stockFor(p,variant),key=cartKey(p.id,variant?.id);
+ const existing=cart.find(x=>x.key===key),next=(existing?.qty||0)+qty;
+ if(stock<=0){alert("هذا المنتج غير متاح حاليًا.");return;}
+ if(next>stock){alert(`الكمية المتاحة من هذا الاختيار هي ${stock} فقط.`);return;}
+ if(existing)existing.qty=next;
+ else cart.push({key,productId:p.id,variantId:variant?.id||null,qty,productName:p.name,variantName:variant?.color_name||"",unitPrice:salePrice(p),image:variant?.color_image_url||productImages(p)[0]||""});
+ renderCart();toggleCart(true);
+}
+function quickAdd(id){
+ const p=products.find(x=>String(x.id)===String(id));if(!p)return;
+ const variants=availableVariants(p);
+ if(variants.length>1){openProduct(id);return;}
+ addCart(p,variants[0]||null,1);
+}
+function addDetailToCart(){
+ if(!activeProduct)return;
+ const qty=Math.max(1,parseInt(document.getElementById("detailQty").value,10)||1);
+ const variants=availableVariants(activeProduct);
+ if(variants.length&&!selectedVariant){alert("اختار اللون أولًا.");return;}
+ addCart(activeProduct,selectedVariant,qty);
+ if(cart.length)closeProduct();
+}
+function changeQty(key,delta){
+ const item=cart.find(x=>x.key===key);if(!item)return;
+ const p=products.find(x=>String(x.id)===String(item.productId));
+ const variant=p?.product_variants?.find(v=>String(v.id)===String(item.variantId));
+ const max=p?stockFor(p,variant):0;
+ item.qty+=delta;
+ if(item.qty<=0)cart=cart.filter(x=>x.key!==key);
+ else if(item.qty>max){item.qty=max;alert(`المتاح ${max} فقط.`);}
+ renderCart();
+}
+function cartTotal(){return cart.reduce((sum,x)=>sum+x.unitPrice*x.qty,0);}
 function renderCart(){
  document.getElementById("cartCount").textContent=cart.reduce((s,x)=>s+x.qty,0);
- document.getElementById("cartItems").innerHTML=cart.length?cart.map(x=>{const p=products.find(y=>y.id===x.id);return `<div class="cart-item"><div><b>${p.name}</b><br>${money(p.price)} × ${x.qty}</div><div class="qty"><button onclick="changeQty(${p.id},-1)">−</button> ${x.qty} <button onclick="changeQty(${p.id},1)">+</button></div></div>`}).join(""):'<p class="note">السلة فارغة حاليًا. أضف بعض المنتجات للمتابعة.</p>';
- document.getElementById("total").textContent=money(cart.reduce((s,x)=>s+products.find(p=>p.id===x.id).price*x.qty,0));
+ document.getElementById("cartItems").innerHTML=cart.length?cart.map(x=>`
+ <div class="cart-item"><div><b>${safe(x.productName)}</b>${x.variantName?`<br>اللون: ${safe(x.variantName)}`:""}<br>${money(x.unitPrice)} × ${x.qty}</div>
+ <div class="qty"><button onclick="changeQty('${x.key}',-1)">−</button> ${x.qty} <button onclick="changeQty('${x.key}',1)">+</button></div></div>`).join(""):'<p class="note">السلة فارغة حاليًا. أضف بعض المنتجات للمتابعة.</p>';
+ const total=cartTotal();
+ document.getElementById("total").textContent=money(total);
+ document.getElementById("shippingNote").textContent=total>FREE_SHIPPING_THRESHOLD?"مبروك! الشحن مجاني لطلبك.":"الشحن مجاني للطلبات التي يتجاوز إجماليها 1500 جنيه. تكلفة الشحن للطلبات الأخرى تُؤكد عبر واتساب.";
 }
 function toggleCart(show){document.getElementById("overlay").classList.toggle("open",show);}
 function sendOrder(e){
  e.preventDefault();if(!cart.length){alert("السلة فارغة");return;}
  const name=document.getElementById("customerName").value.trim(),phone=document.getElementById("customerPhone").value.trim(),address=document.getElementById("customerAddress").value.trim(),notes=document.getElementById("customerNotes").value.trim();
- const lines=cart.map(x=>{const p=products.find(y=>y.id===x.id);return `- ${p.name} × ${x.qty} = ${money(p.price*x.qty)}`}).join("\n");
- const total=cart.reduce((s,x)=>s+products.find(p=>p.id===x.id).price*x.qty,0);
- const msg=`طلب جديد من متجر DOCTOR WATCHES\n\nالاسم: ${name}\nالهاتف: ${phone}\nالعنوان: ${address}\n\nالمنتجات:\n${lines}\n\nالإجمالي: ${money(total)}\nطريقة الدفع: الدفع عند الاستلام\nملاحظات: ${notes||"لا يوجد"}`;
+ const lines=cart.map(x=>`- ${x.productName}${x.variantName?` (${x.variantName})`:""} × ${x.qty} = ${money(x.unitPrice*x.qty)}`).join("\n");
+ const total=cartTotal(),shipping=total>FREE_SHIPPING_THRESHOLD?"مجاني":"يتم تأكيده عبر خدمة العملاء";
+ const msg=`طلب جديد من متجر DOCTOR WATCHES\n\nالاسم: ${name}\nالهاتف: ${phone}\nالعنوان: ${address}\n\nالمنتجات:\n${lines}\n\nالإجمالي: ${money(total)}\nالشحن: ${shipping}\nطريقة الدفع: الدفع عند الاستلام\nملاحظات: ${notes||"لا يوجد"}`;
  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`,"_blank");
 }
-renderProducts();renderCart();
+renderCart();
+loadStoreProducts();
 </script>
-</body></html>
+</body>
+</html>
