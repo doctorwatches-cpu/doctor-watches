@@ -54,6 +54,7 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:right;
 <button class="active" data-tab="products">المنتجات</button>
 <button data-tab="categories">الأقسام</button>
 <button data-tab="offers">العروض والخصومات</button>
+<button data-tab="orders">الطلبات</button>
 </nav>
 
 <section id="products" class="card panel">
@@ -82,6 +83,11 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:right;
 <h3>العروض والخصومات</h3>
 <p class="muted">العروض هنا تُطبّق على المنتجات فقط. يمكنك تحديد خصم نسبي أو مبلغ ثابت داخل نموذج المنتج.</p>
 <div id="offersBody"></div>
+</section>
+<section id="orders" class="card panel hidden">
+<div class="row"><h3>إدارة الطلبات</h3><button class="secondary" onclick="loadOrders()">تحديث</button></div>
+<div id="ordersMsg" class="msg">اضغط تحديث لتحميل الطلبات.</div>
+<div class="tablewrap"><table><thead><tr><th>رقم الطلب</th><th>العميل</th><th>الهاتف</th><th>الإجمالي</th><th>الدفع</th><th>الحالة</th><th>إجراءات</th></tr></thead><tbody id="ordersBody"></tbody></table></div>
 </section>
 </section>
 </main>
@@ -140,7 +146,7 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:right;
 </div>
 
 <script>
-const SUPABASE_URL="https://ltdkxrkuxhsmozvhggqu.supabase.co";
+  const SUPABASE_URL="https://ltdkxrkuxhsmozvhggqu.supabase.co";
 const SUPABASE_KEY="sb_publishable_qmOzuZWXgShi21qCG0YRoQ_zWwWf9cl";
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const $=id=>document.getElementById(id);
@@ -201,20 +207,64 @@ showApp();
 finally{$("loginBtn").disabled=false;}
 });
 
-$("logout").onclick=async()=>{
-await db.auth.signOut();
-showLogin();
-};
+$("logout").onclick=async()=>{await db.auth.signOut();showLogin();};
 
-document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{
-document.querySelectorAll("[data-tab]").forEach(x=>x.classList.toggle("active",x===b));
-document.querySelectorAll(".panel").forEach(x=>x.classList.toggle("hidden",x.id!==b.dataset.tab));
-if(b.dataset.tab==="offers")renderOffers();
+document.querySelectorAll("[data-tab]").forEach(btn=>{
+btn.onclick=()=>{
+document.querySelectorAll("[data-tab]").forEach(x=>x.classList.toggle("active",x===btn));
+document.querySelectorAll(".panel").forEach(x=>x.classList.toggle("hidden",x.id!==btn.dataset.tab));
+if(btn.dataset.tab==="orders")loadOrders();
+};
 });
 
 async function loadAll(){
-await Promise.all([loadCategories(),loadProducts()]);
+await loadCategories();
+await loadProducts();
 }
+
+async function loadOrders(){
+note("ordersMsg","جارٍ تحميل الطلبات...");
+const {data,error}=await db.from("store_orders").select("*").order("created_at",{ascending:false}).limit(100);
+if(error){note("ordersMsg",error.message,true);return;}
+window.storeOrders=data||[];
+$("ordersBody").innerHTML=window.storeOrders.map(o=>`
+<tr>
+<td>${esc(o.order_number)}</td>
+<td>${esc(o.customer_name)}</td>
+<td>${esc(o.customer_phone)}</td>
+<td>${money(o.total)}</td>
+<td>${esc(o.payment_method)}<br><small>${esc(o.payment_status)}</small></td>
+<td>
+<select id="status-${o.id}">
+<option value="pending" ${o.status==="pending"?"selected":""}>قيد الانتظار</option>
+<option value="confirmed" ${o.status==="confirmed"?"selected":""}>مؤكد</option>
+<option value="processing" ${o.status==="processing"?"selected":""}>قيد التجهيز</option>
+<option value="shipped" ${o.status==="shipped"?"selected":""}>تم الشحن</option>
+<option value="delivered" ${o.status==="delivered"?"selected":""}>تم التسليم</option>
+<option value="cancelled" ${o.status==="cancelled"?"selected":""}>ملغي</option>
+</select></td>
+<td><div class="actions">
+<button onclick="updateOrder('${o.id}')">حفظ الحالة</button>
+${o.payment_proof_path?`<button class="secondary" onclick="viewProof('${o.id}')">عرض الإيصال</button>`:""}
+</div></td></tr>`).join("");
+note("ordersMsg",`عدد الطلبات المعروضة: ${window.storeOrders.length}`);
+}
+
+window.updateOrder=async id=>{
+const status=$("status-"+id).value;
+const {error}=await db.rpc("admin_update_store_order_status",{p_order_id:id,p_new_status:status,p_note:"تحديث من لوحة الإدارة"});
+if(error){alert("تعذر تحديث الطلب: "+error.message);return;}
+alert("تم تحديث حالة الطلب.");
+loadOrders();
+};
+
+window.viewProof=async id=>{
+const o=window.storeOrders.find(x=>x.id===id);
+if(!o?.payment_proof_path)return;
+const {data,error}=await db.storage.from("payment-proofs").createSignedUrl(o.payment_proof_path,300);
+if(error){alert("تعذر فتح الإيصال: "+error.message);return;}
+window.open(data.signedUrl,"_blank");
+};
 
 async function loadCategories(){
 note("categoriesMsg","جارٍ تحميل الأقسام...");
@@ -276,7 +326,6 @@ $("offersBody").innerHTML=active.length?`<div class="tablewrap"><table>
 <td>${p.discount_type==="percentage"?p.discount_value+"%":p.discount_type==="fixed"?money(p.discount_value):"—"}</td>
 <td>${p.offer_active?"نعم":"لا"}</td></tr>`).join("")}</tbody></table></div>`:"لا توجد عروض أو خصومات مفعّلة حاليًا.";
 }
-
 function openProduct(){
 $("productForm").reset();
 $("productId").value="";
@@ -500,3 +549,5 @@ checkSession();
 </script>
 </body>
 </html>
+  
+  
