@@ -6,7 +6,72 @@
 <meta name="theme-color" content="#f5f1e9">
 <title>DOCTOR WATCHES | متجر الساعات</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
+/* FULL SCREEN IMAGE ZOOM */
+#imageViewer{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:10000;
+  background:#080808;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  touch-action:none;
+}
+
+#imageViewer.open{
+  display:flex;
+}
+
+#zoomImage{
+  max-width:100%;
+  max-height:100%;
+  width:auto;
+  height:auto;
+  object-fit:contain;
+  transform-origin:center center;
+  user-select:none;
+  -webkit-user-drag:none;
+  touch-action:none;
+}
+
+.zoom-close{
+  position:absolute;
+  top:18px;
+  right:18px;
+  z-index:3;
+  background:#333;
+  color:white;
+  border:1px solid white;
+  border-radius:50%;
+  width:45px;
+  height:45px;
+  font-size:26px;
+}
+
+.zoom-controls{
+  position:absolute;
+  bottom:25px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  gap:12px;
+  z-index:3;
+}
+
+.zoom-controls button{
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  background:#333;
+  color:white;
+  border:1px solid white;
+  font-size:23px;
+}
+
+#detailMainImage{
+  cursor:zoom-in;
+}<style>
 :root{--ink:#18221f;--muted:#68716c;--cream:#f5f1e9;--paper:#fffdf9;--line:#e6e0d6;--accent:#9b7651;--green:#245b48}
 *{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font-family:Tahoma,Arial,sans-serif}
 a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit}
@@ -107,7 +172,15 @@ form{display:grid;gap:10px}form label{font-size:12px;color:var(--muted)}form inp
 <label>الكمية<input id="detailQty" type="number" min="1" value="1" style="width:100px;padding:10px;border:1px solid var(--line)"></label>
 <button class="send" id="detailAdd" type="button">أضف إلى السلة</button>
 </div></div></div></div>
-
+<div id="imageViewer">
+  <button class="zoom-close" onclick="closeImageViewer()">×</button>
+  <img id="zoomImage" alt="صورة المنتج">
+  <div class="zoom-controls">
+    <button onclick="changeZoom(0.5)">−</button>
+    <button onclick="resetZoom()">⟲</button>
+    <button onclick="changeZoom(0.5,true)">+</button>
+  </div>
+</div>
 <script>
 const SUPABASE_URL="https://ltdkxrkuxhsmozvhggqu.supabase.co";
 const SUPABASE_KEY="sb_publishable_qmOzuZWXgShi21qCG0YRoQ_zWwWf9cl";
@@ -293,7 +366,93 @@ async function loadStoreSettings(){
 renderCart();
 loadStoreSettings();
 loadStoreProducts();
-</script>
+let zoomLevel=1;
+let startDistance=0;
+let startZoom=1;
+
+function openImageViewer(){
+  const img=document.getElementById("detailMainImage");
+  const viewer=document.getElementById("imageViewer");
+  const zoomImg=document.getElementById("zoomImage");
+
+  if(!img.src)return;
+
+  zoomImg.src=img.src;
+  viewer.classList.add("open");
+  document.body.style.overflow="hidden";
+  resetZoom();
+}
+
+function closeImageViewer(){
+  document.getElementById("imageViewer").classList.remove("open");
+  document.body.style.overflow="";
+  resetZoom();
+}
+
+function applyZoom(){
+  document.getElementById("zoomImage").style.transform=
+    `scale(${zoomLevel})`;
+}
+
+function changeZoom(amount,plus=false){
+  zoomLevel=Math.max(1,Math.min(4,
+    zoomLevel+(plus?amount:-amount)
+  ));
+  applyZoom();
+}
+
+function resetZoom(){
+  zoomLevel=1;
+  applyZoom();
+}
+
+document.getElementById("detailMainImage").addEventListener(
+  "click",openImageViewer
+);
+
+const zoomImg=document.getElementById("zoomImage");
+
+zoomImg.addEventListener("wheel",e=>{
+  e.preventDefault();
+  zoomLevel=Math.max(1,Math.min(4,
+    zoomLevel+(e.deltaY<0?0.2:-0.2)
+  ));
+  applyZoom();
+},{passive:false});
+
+zoomImg.addEventListener("touchstart",e=>{
+  if(e.touches.length===2){
+    startDistance=Math.hypot(
+      e.touches[0].clientX-e.touches[1].clientX,
+      e.touches[0].clientY-e.touches[1].clientY
+    );
+    startZoom=zoomLevel;
+  }
+},{passive:true});
+
+zoomImg.addEventListener("touchmove",e=>{
+  if(e.touches.length===2){
+    e.preventDefault();
+    const distance=Math.hypot(
+      e.touches[0].clientX-e.touches[1].clientX,
+      e.touches[0].clientY-e.touches[1].clientY
+    );
+    if(startDistance>0){
+      zoomLevel=Math.max(1,Math.min(4,
+        startZoom*distance/startDistance
+      ));
+      applyZoom();
+    }
+  }
+},{passive:false});
+
+zoomImg.addEventListener("touchend",()=>{
+  startDistance=0;
+});
+
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape")closeImageViewer();
+});</script>
 </body>
 </html>
  
